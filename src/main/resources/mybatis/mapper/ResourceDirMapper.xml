@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.ResourceDirMapper" >
+    <resultMap id="BaseResultMap" type="com.example.demo.model.ResourceDir" >
+        <id column="dir_id" property="resDir" jdbcType="INTEGER" />
+        <result column="dir_name" property="dirName" jdbcType="VARCHAR" />
+        <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    </resultMap>
+    
+    <sql id="Base_Column_List" >
+        dir_id, dir_name, parent_id
+    </sql>
+ 
+    <select id="getAll" resultMap="BaseResultMap"  >
+       SELECT 
+       dir_id, dir_name, parent_id
+	   FROM public.resourcedir
+    </select>
+ 
+    <select id="getOne" parameterType="int" resultMap="BaseResultMap" >
+        SELECT 
+       <include refid="Base_Column_List" />
+	   FROM public.resourcedir
+	   WHERE dir_id = (#{resDir})
+    </select>
+ 
+    <insert id="insert" parameterType="com.example.demo.model.ResourceDir" >
+       INSERT INTO 
+       		public.resourcedir
+       		(dir_id,dir_name,parent_id) 
+       	VALUES
+       		(#{resDir}, #{dirName}, #{parentId})
+    </insert>
+    
+    <update id="update" parameterType="com.example.demo.model.ResourceDir" >
+       UPDATE 
+       		public.resourcedir
+       SET 
+       	<if test="dirName != null">dir_name = #{dirName},</if>
+       	parent_id = #{parentId}
+       WHERE 
+       		dir_id = #{resDir}
+    </update>
+   
+    <delete id="delete" parameterType="int" >
+       DELETE FROM
+       		 public.resourcedir 
+       WHERE
+       		 dir_id =#{resDir}
+    </delete>
+ 
+</mapper>
